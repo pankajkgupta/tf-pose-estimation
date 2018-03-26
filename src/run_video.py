@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
 
         # open csv file to write joints
-        csvfile = open(vid_f[:-4] + '.csv', "w")
+        csvfile = open('../out/pose_' + vid_f[:-4] + '.csv', "w")
         jointwriter = csv.writer(csvfile, delimiter=' ',quotechar='|', quoting=csv.QUOTE_MINIMAL)
         columnTitle = ["video_name,frame_n,nose,r_shoulder,r_elbow,r_wrist,l_shoulder,l_elbow,l_wrist"]
         jointwriter.writerow(columnTitle)
