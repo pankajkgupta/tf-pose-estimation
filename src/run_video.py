@@ -54,28 +54,32 @@ if __name__ == '__main__':
 	#if os.path.isfile(outfield):
 	#    continue
         out = cv2.VideoWriter(outfile, fourcc, 25, (320, 240))
-
+        i_fr = 0
         while(cap.isOpened()):
         #for i in range(1,1000):
             ret_val, image = cap.read()
 
+            if ret_val==True:
+                i_fr += 1
+                humans = e.inference(image)
+                image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
-            humans = e.inference(image)
-            image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
+                #logger.debug('show+')
+                cv2.putText(image,
+                            "FPS: %f" % (1.0 / (time.time() - fps_time)),
+                            (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                            (0, 255, 0), 2)
 
-            #logger.debug('show+')
-            cv2.putText(image,
-                        "FPS: %f" % (1.0 / (time.time() - fps_time)),
-                        (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                        (0, 255, 0), 2)
+                # write the flipped frame
+                out.write(image)
 
-            # write the flipped frame
-            out.write(image)
+                cv2.imshow('tf-pose-estimation result', image)
+                fps_time = time.time()
+                height, width = image.shape[:2]
 
-            cv2.imshow('tf-pose-estimation result', image)
-            fps_time = time.time()
-            height, width = image.shape[:2]
-
+                print "Video: {} frame: {}".format(vid_f, i_fr)
+            else:
+                break
             if cv2.waitKey(1) == 27:
                 break
 
