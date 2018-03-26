@@ -9,6 +9,8 @@ import os
 from estimator import TfPoseEstimator
 from networks import get_graph_path, model_wh
 
+import csv
+
 logger = logging.getLogger('TfPoseEstimator-Video')
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
@@ -35,7 +37,8 @@ if __name__ == '__main__':
     e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h))
 
     sub='MG107'
-    video_root = '../../../video_data/MG107/0f4db67a-4533-45ff-b2e3-86cef598973d/'
+    # video_root = '../../../video_data/MG107/0f4db67a-4533-45ff-b2e3-86cef598973d/'
+    video_root = '/media/clpsshare/pgupta/1c92e577-9f23-4564-a8cd-f2b3e2cbf27e/'
     l_vids = os.listdir(video_root)
     l_vids = sorted(l_vids)
 
@@ -48,11 +51,17 @@ if __name__ == '__main__':
         if (cap.isOpened()== False):
             print("Error opening video stream or file")
 
+
+        # open csv file to write joints
+        csvfile = open(vid_f[:-4] + '.csv', "w")
+        jointwriter = csv.writer(csvfile, delimiter=' ',quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        columnTitle = ["video_name,frame_n,nose,r_shoulder,r_elbow,r_wrist,l_shoulder,l_elbow,l_wrist"]
+        jointwriter.writerow(columnTitle)
         # Define the codec and create VideoWriter object
         fourcc = cv2.VideoWriter_fourcc(*'MP4V')
-	outfile = '../out/pose_' + vid_f
-	#if os.path.isfile(outfield):
-	#    continue
+        outfile = '../out/pose_' + vid_f
+        #if os.path.isfile(outfield):
+        #    continue
         out = cv2.VideoWriter(outfile, fourcc, 25, (320, 240))
         i_fr = 0
         while(cap.isOpened()):
@@ -64,6 +73,25 @@ if __name__ == '__main__':
                 humans = e.inference(image)
                 image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
+                aa = dict
+                joints = dict(zip(range(18),[{'x':np.nan, 'y':np.nan}]*18))
+                for human in humans:
+                    for key in range(18):
+                        if key in human.body_parts:
+                            joints[key]['x'] = human.body_parts[key].x
+                            joints[key]['y'] = human.body_parts[key].y
+                        else:
+                            joints[key]['x'] = joints[key]['y'] = np.nan
+
+                    jointwriter.writerow(["{},{},({}:{}),({}:{}),({}:{}),({}:{}),({}:{}),({}:{}),({}:{})".format(
+                        vid_f, i_fr,
+                        joints[0]['x'], joints[0]['y'],
+                        joints[2]['x'], joints[2]['y'],
+                        joints[3]['x'], joints[3]['y'],
+                        joints[4]['x'], joints[4]['y'],
+                        joints[5]['x'], joints[5]['y'],
+                        joints[6]['x'], joints[6]['y'],
+                        joints[7]['x'], joints[7]['y'])])
                 #logger.debug('show+')
                 cv2.putText(image,
                             "FPS: %f" % (1.0 / (time.time() - fps_time)),
@@ -83,6 +111,7 @@ if __name__ == '__main__':
             if cv2.waitKey(1) == 27:
                 break
 
+        csvfile.close()
         cap.release()
         out.release()
         cv2.destroyAllWindows()
