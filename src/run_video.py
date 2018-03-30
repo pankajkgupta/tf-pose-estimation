@@ -83,6 +83,8 @@ if __name__ == '__main__':
                         if key in human.body_parts:
                             body_part = human.body_parts[key]
                             center = (int(body_part.x * vid_width + 0.5), int(body_part.y * vid_height + 0.5))
+                            if not ((40 < center[0] < 260) or (50 < center[1] < 200)):
+                                break
                             joints[key]['x'] = center[0]
                             joints[key]['y'] = center[1]
                         else:
