@@ -46,7 +46,6 @@ if __name__ == '__main__':
         #logger.debug('cam read+')
         #cam = cv2.VideoCapture(args.camera)
         cap = cv2.VideoCapture(video_root + vid_f)
-        cap = cv2.VideoCapture(video_root + vid_f)
         vid_width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
         vid_height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         #ret_val, image = cap.read()
