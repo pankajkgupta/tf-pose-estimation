@@ -37,7 +37,7 @@ if __name__ == '__main__':
     e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h))
 
     sub='MG107'
-    video_root = '../../../video_data/MG107/0f4db67a-4533-45ff-b2e3-86cef598973d/'
+    video_root = '/media/clpsshare/pgupta/0f4db67a-4533-45ff-b2e3-86cef598973d/'
     #video_root = '/media/clpsshare/pgupta/1c92e577-9f23-4564-a8cd-f2b3e2cbf27e/'
     l_vids = os.listdir(video_root)
     l_vids = sorted(l_vids)
@@ -46,6 +46,8 @@ if __name__ == '__main__':
         #logger.debug('cam read+')
         #cam = cv2.VideoCapture(args.camera)
         cap = cv2.VideoCapture(video_root + vid_f)
+        vid_width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
+        vid_height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         #ret_val, image = cap.read()
         #logger.info('cam image=%dx%d' % (image.shape[1], image.shape[0]))
         if (cap.isOpened()== False):
@@ -69,7 +71,7 @@ if __name__ == '__main__':
             ret_val, image = cap.read()
 
             if ret_val==True:
-                i_fr += 1
+
                 humans = e.inference(image)
                 image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
@@ -78,8 +80,10 @@ if __name__ == '__main__':
                 for human in humans:
                     for key in range(18):
                         if key in human.body_parts:
-                            joints[key]['x'] = human.body_parts[key].x
-                            joints[key]['y'] = human.body_parts[key].y
+                            body_part = human.body_parts[key]
+                            center = (int(body_part.x * vid_width + 0.5), int(body_part.y * vid_height + 0.5))
+                            joints[key]['x'] = center[0]
+                            joints[key]['y'] = center[1]
                         else:
                             joints[key]['x'] = joints[key]['y'] = np.nan
 
@@ -106,6 +110,7 @@ if __name__ == '__main__':
                 height, width = image.shape[:2]
 
                 print "Video: {} frame: {}".format(vid_f, i_fr)
+                i_fr += 1
             else:
                 break
             if cv2.waitKey(1) == 27:
