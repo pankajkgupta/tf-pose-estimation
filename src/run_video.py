@@ -37,8 +37,8 @@ if __name__ == '__main__':
     e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h))
 
     sub='MG107'
-    # video_root = '../../../video_data/MG107/0f4db67a-4533-45ff-b2e3-86cef598973d/'
-    video_root = '/media/clpsshare/pgupta/1c92e577-9f23-4564-a8cd-f2b3e2cbf27e/'
+    video_root = '../../../video_data/MG107/0f4db67a-4533-45ff-b2e3-86cef598973d/'
+    #video_root = '/media/clpsshare/pgupta/1c92e577-9f23-4564-a8cd-f2b3e2cbf27e/'
     l_vids = os.listdir(video_root)
     l_vids = sorted(l_vids)
 
@@ -83,7 +83,7 @@ if __name__ == '__main__':
                         else:
                             joints[key]['x'] = joints[key]['y'] = np.nan
 
-                    jointwriter.writerow(["{},{},({}:{}),({}:{}),({}:{}),({}:{}),({}:{}),({}:{}),({}:{})".format(
+                    jointwriter.writerow(["{},{},{}:{},{}:{},{}:{},{}:{},{}:{},{}:{},{}:{}".format(
                         vid_f, i_fr,
                         joints[0]['x'], joints[0]['y'],
                         joints[2]['x'], joints[2]['y'],
