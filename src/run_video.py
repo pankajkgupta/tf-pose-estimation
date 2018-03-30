@@ -46,6 +46,7 @@ if __name__ == '__main__':
         #logger.debug('cam read+')
         #cam = cv2.VideoCapture(args.camera)
         cap = cv2.VideoCapture(video_root + vid_f)
+        cap = cv2.VideoCapture(video_root + vid_f)
         vid_width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
         vid_height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         #ret_val, image = cap.read()
@@ -87,7 +88,7 @@ if __name__ == '__main__':
                         else:
                             joints[key]['x'] = joints[key]['y'] = np.nan
 
-                    jointwriter.writerow(["{},{},{}:{},{}:{},{}:{},{}:{},{}:{},{}:{},{}:{}".format(
+                    jointwriter.writerow(["{},{},{}-{},{}-{},{}-{},{}-{},{}-{},{}-{},{}-{}".format(
                         vid_f, i_fr,
                         joints[0]['x'], joints[0]['y'],
                         joints[2]['x'], joints[2]['y'],
