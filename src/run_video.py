@@ -76,7 +76,7 @@ if __name__ == '__main__':
                 image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
                 aa = dict
-                joints = dict(zip(range(18),[{'x':np.nan, 'y':np.nan}]*18))
+                joints = dict(zip(range(18),[{'x':np.nan, 'y':np.nan} for i in range(18)]))
                 for human in humans:
                     for key in range(18):
                         if key in human.body_parts:
