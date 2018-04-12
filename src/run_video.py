@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     sub='MG107'
     # video_root = '../'
-    video_root = '/media/data_cifs/pgupta/0f4db67a-4533-45ff-b2e3-86cef598973d/'
+    video_root = '../../../video_data/MG107/1c92e577-9f23-4564-a8cd-f2b3e2cbf27e/'
     l_vids = glob.glob(video_root + '*.mp4')
     l_vids = sorted(l_vids)
 
@@ -58,15 +58,18 @@ if __name__ == '__main__':
             print("Error opening video stream or file")
 
 
+        out_root = '../out/' + os.path.basename(vid_f)[:-4] + '/'
+        if not os.path.exists(out_root):
+            os.makedirs(out_root)
         # open csv file to write joints
-        csvfile = open('../out/pose_' + os.path.basename(vid_f)[:-4] + '.csv', "w")
+        csvfile = open(out_root + 'pose_' + os.path.basename(vid_f)[:-4] + '.csv', "w")
 
         jointwriter = csv.writer(csvfile, delimiter=' ',quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
         jointwriter.writerow([columnTitle])
         # Define the codec and create VideoWriter object
         fourcc = cv2.VideoWriter_fourcc(*'MP4V')
-        outfile = '../out/pose_' + os.path.basename(vid_f)
+        outfile = out_root + 'pose_' + os.path.basename(vid_f)
         #if os.path.isfile(outfield):
         #    continue
         out = cv2.VideoWriter(outfile, fourcc, 25, (320, 240))
