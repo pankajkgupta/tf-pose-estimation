@@ -44,7 +44,7 @@ if __name__ == '__main__':
     l_vids = glob.glob(video_root + '*.mp4')
     l_vids = sorted(l_vids)
 
-    columnTitle = ["sub_n, video_name,frame_n,nose,r_shoulder,r_elbow,r_wrist,l_shoulder,l_elbow,l_wrist,quality"]
+    columnTitle = 'sub_n,video_name,frame_n,nose,r_shoulder,r_elbow,r_wrist,l_shoulder,l_elbow,l_wrist,quality'
     for vid_f in l_vids:
         #logger.debug('cam read+')
         #cam = cv2.VideoCapture(args.camera)
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
         jointwriter = csv.writer(csvfile, delimiter=' ',quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
-        jointwriter.writerow(columnTitle)
+        jointwriter.writerow([columnTitle])
         # Define the codec and create VideoWriter object
         fourcc = cv2.VideoWriter_fourcc(*'MP4V')
         outfile = '../out/pose_' + os.path.basename(vid_f)
