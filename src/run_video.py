@@ -58,7 +58,7 @@ if __name__ == '__main__':
             print("Error opening video stream or file")
 
 
-        out_root = '../out/' + os.path.basename(vid_f)[:-4] + '/'
+        out_root = '../out/' + os.path.basename(vid_f)[:-9] + '/'
         if not os.path.exists(out_root):
             os.makedirs(out_root)
         # open csv file to write joints
