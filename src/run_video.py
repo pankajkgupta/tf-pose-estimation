@@ -110,7 +110,7 @@ if __name__ == '__main__':
                     joints[5]['x'], joints[5]['y'], joints[5]['score'],
                     joints[6]['x'], joints[6]['y'], joints[6]['score'],
                     joints[7]['x'], joints[7]['y'], joints[7]['score'],
-                    0 if not np.any(score_arr) else 1 if np.mean(score_arr[[0,2,3,4,5,6,7]]) > 5 else -1)])
+                    0 if not np.any(score_arr) else 1 if np.mean(score_arr[[0,2,3,4,5,6,7]]) > 5 and np.where(score_arr[[0,2,3,4,5,6,7]] == 0)[0].size == 0 else -1)])
                 #logger.debug('show+')
                 cv2.putText(image,
                             "FPS: %f" % (1.0 / (time.time() - fps_time)),
